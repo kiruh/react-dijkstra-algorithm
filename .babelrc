@@ -1,0 +1,31 @@
+{
+	"presets": [
+		"react",
+		[
+			"env",
+			{
+				"targets": {
+					"browsers": ["last 2 versions"]
+				}
+			}
+		]
+	],
+	"plugins": [
+		"transform-class-properties",
+		"transform-object-rest-spread",
+		[
+			"transform-runtime",
+			{
+				"polyfill": false,
+				"helpers": false,
+				"regenerator": true
+			}
+		],
+		[
+			"babel-plugin-transform-builtin-extend",
+			{
+				"globals": ["Error", "Array"]
+			}
+		]
+	]
+}
