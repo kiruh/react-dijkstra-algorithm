@@ -3,43 +3,34 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
 import Graph from "~/models/Graph";
-import { addNode } from "~/actions/controller";
+import { addNode, changeGraph } from "~/actions/controller";
 
 class NodeInput extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = this.getInitialState();
-	}
-
-	getInitialState() {
-		return {
-			name: "",
-			weight: 0,
-			x: 0,
-			y: 0,
-		};
-	}
-
 	onNameChange(name) {
-		this.setState({ name });
+		if (!this.isValidName(name)) return;
+		const graph = this.props.graph.copy();
+		graph.nodes[this.node.name].name = name;
+		changeGraph(graph);
 	}
 
 	onNumberInputChange(value, field) {
-		this.setState({
-			[field]: Number(value),
-		});
+		const graph = this.props.graph.copy();
+		graph.nodes[this.node.name][field] = Number(value);
+		changeGraph(graph);
 	}
 
 	onSave() {
-		const { name, weight, x, y } = this.state;
+		const { name, weight, x, y } = this.node;
 		addNode(name, weight, x, y);
-		console.log(2892389);
 
 		this.setState(this.getInitialState());
 	}
 
-	isValid() {
-		const { name } = this.state;
+	get node() {
+		return this.props.graph.nodes[this.props.activeItem.name];
+	}
+
+	isValidName(name) {
 		const similar = this.props.graph.nodes[name];
 		return name && !similar;
 	}
@@ -47,13 +38,13 @@ class NodeInput extends React.Component {
 	renderNameInput() {
 		return (
 			<div className="form-group row">
-				<label htmlFor="name" className="col-sm-2 col-form-label">
+				<label htmlFor="name" className="col-lg-6 col-form-label">
 					Name:
 				</label>
 				<input
 					id="name"
-					className="form-control col-sm-10"
-					value={this.state.name}
+					className="form-control col-lg-6"
+					value={this.node.name}
 					onChange={event => {
 						this.onNameChange(event.target.value);
 					}}
@@ -65,14 +56,14 @@ class NodeInput extends React.Component {
 	renderNumberInput(field, label) {
 		return (
 			<div className="form-group row">
-				<label htmlFor={field} className="col-sm-2 col-form-label">
+				<label htmlFor={field} className="col-lg-6 col-form-label">
 					{label}:
 				</label>
 				<input
 					id={field}
-					className="form-control col-sm-10"
+					className="form-control col-lg-6"
 					type="number"
-					value={this.state[field]}
+					value={this.node[field]}
 					onChange={event => {
 						this.onNumberInputChange(event.target.value, field);
 					}}
@@ -81,39 +72,28 @@ class NodeInput extends React.Component {
 		);
 	}
 
-	renderAccept() {
-		return (
-			<button
-				className="btn btn-primary float-right"
-				disabled={!this.isValid()}
-				onClick={() => {
-					this.onSave();
-				}}
-			>
-				Add
-			</button>
-		);
-	}
-
 	render() {
 		return (
 			<div>
-				{this.renderNameInput()}
+				<div className="mb-4">
+					<h5>{this.node.name}</h5>
+				</div>
 				{this.renderNumberInput("weight", "Weight")}
 				{this.renderNumberInput("x", "X")}
 				{this.renderNumberInput("y", "Y")}
-				{this.renderAccept()}
 			</div>
 		);
 	}
 }
 
 NodeInput.propTypes = {
+	activeItem: PropTypes.objectOf(PropTypes.any).isRequired,
 	graph: PropTypes.instanceOf(Graph).isRequired,
 };
 
 const mapStateToProps = state => ({
 	graph: state.graph,
+	activeItem: state.activeItem,
 });
 
 export default connect(mapStateToProps)(NodeInput);

@@ -40,8 +40,8 @@ export default class DijkstraSearch {
 
 			for (let i = 0; i < current.paths.length; i += 1) {
 				const link = current.paths[i];
-				if (link.endPoint.name === finish) {
-					const path = [link.endPoint];
+				if (link.toNodeName.name === finish) {
+					const path = [link.toNodeName];
 					let last = current;
 					while (last.name !== start) {
 						path.unshift(last);
@@ -51,24 +51,24 @@ export default class DijkstraSearch {
 					return path;
 				}
 
-				if (!tested.includes(link.endPoint)) {
+				if (!tested.includes(link.toNodeName)) {
 					const currentDistance = distances[current.name].dist;
 					const newDistance =
 						currentDistance +
 						DijkstraSearch.getDistance(current, link, distanceType);
 
-					if (distances[link.endPoint.name].dist > newDistance) {
-						distances[link.endPoint.name] = {
+					if (distances[link.toNodeName.name].dist > newDistance) {
+						distances[link.toNodeName.name] = {
 							prev: current,
 							dist: newDistance,
 						};
 					}
 
-					const index = queue.indexOf(link.endPoint);
+					const index = queue.indexOf(link.toNodeName);
 					if (index !== -1) {
-						queue[index] = link.endPoint;
+						queue[index] = link.toNodeName;
 					} else {
-						queue.push(link.endPoint);
+						queue.push(link.toNodeName);
 					}
 				}
 			}
@@ -84,14 +84,14 @@ export default class DijkstraSearch {
 
 		if (distanceType === DijkstraSearch.BY_COORDINATES) {
 			const a = node;
-			const b = link.endPoint;
+			const b = link.toNodeName;
 			/* eslint-disable no-mixed-operators */
 			return Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2);
 			/* eslint-enable */
 		}
 
 		if (distanceType === DijkstraSearch.BY_WEIGHT) {
-			return link.endPoint.weight;
+			return link.toNodeName.weight;
 		}
 
 		return 0;
