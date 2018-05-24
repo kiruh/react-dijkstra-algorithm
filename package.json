@@ -43,6 +43,7 @@
 		]
 	},
 	"dependencies": {
+		"algebra.js": "^0.2.6",
 		"babel-runtime": "^6.26.0",
 		"d3": "^5.4.0",
 		"electron": "^2.0.0",

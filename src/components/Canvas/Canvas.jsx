@@ -9,6 +9,7 @@ import Node from "~/models/Node";
 import LinkDrawing from "./LinkDrawing";
 import { setActiveItem } from "~/actions/index";
 import { addNode } from "~/actions/controller";
+import { ACTIVE_COLOR, LINK_COLOR } from "~/constants";
 
 import styles from "./Canvas.less";
 
@@ -28,7 +29,7 @@ class Canvas extends React.Component {
 				>
 					<path
 						d="M2,2 L10,6 L2,10 L6,6 L2,2"
-						style={{ fill: "green" }}
+						style={{ fill: LINK_COLOR }}
 					/>
 				</marker>
 				<marker
@@ -43,7 +44,7 @@ class Canvas extends React.Component {
 				>
 					<path
 						d="M2,2 L10,6 L2,10 L6,6 L2,2"
-						style={{ fill: "blue" }}
+						style={{ fill: ACTIVE_COLOR }}
 					/>
 				</marker>
 			</defs>
@@ -103,7 +104,21 @@ class Canvas extends React.Component {
 	}
 
 	renderLinks() {
-		return this.props.graph.linkArray.map((link, index) => (
+		const { activeItem } = this.props;
+		const linkArray = [...this.props.graph.linkArray];
+		if (activeItem && activeItem.type === "LINK") {
+			linkArray.sort((a, b) => {
+				const { start, end } = activeItem;
+				if (a.start.name === start && a.end.name === end) {
+					return 1;
+				}
+				if (b.start.name === start && b.end.name === end) {
+					return -1;
+				}
+				return 0;
+			});
+		}
+		return linkArray.map((link, index) => (
 			<LinkDrawing key={index} link={link} />
 		));
 	}
@@ -144,10 +159,12 @@ class Canvas extends React.Component {
 Canvas.propTypes = {
 	graph: PropTypes.instanceOf(Graph).isRequired,
 	setActiveItem: PropTypes.func.isRequired,
+	activeItem: PropTypes.objectOf(PropTypes.any),
 };
 
 const mapStateToProps = state => ({
 	graph: state.graph,
+	activeItem: state.activeItem,
 });
 
 const mapDispatchToProps = dispatch => ({

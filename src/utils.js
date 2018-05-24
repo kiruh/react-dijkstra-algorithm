@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-operators */
 const getMinOrMaxPropertyHelper = (arr, prop, type) => {
 	/* IM FCKN GENIUS */
 	if (!arr) return undefined;
@@ -19,3 +20,33 @@ export const getMinProperty = (arr, prop) =>
 
 export const getMaxProperty = (arr, prop) =>
 	getMinOrMaxPropertyHelper(arr, prop, "max");
+
+export const getEquationOfLineFromTwoPoints = (point1, point2) => {
+	const equation = {
+		gradient: (point1.y - point2.y) / (point1.x - point2.x),
+	};
+	let parts;
+
+	equation.yIntercept = point1.y - equation.gradient * point1.x;
+	equation.toString = () => {
+		if (Math.abs(equation.gradient) === Infinity) {
+			return `x = ${point1.x}`;
+		}
+		parts = [];
+
+		if (equation.gradient !== 0) {
+			parts.push(`${equation.gradient}x`);
+		}
+
+		if (equation.yIntercept !== 0) {
+			parts.push(equation.yIntercept);
+		}
+
+		return `y = ${parts.join(" + ")}`;
+	};
+
+	return equation;
+};
+
+export const floatToFixedIfNeeded = number =>
+	number.toFixed(2).replace(/[.,]00$/, "");

@@ -7,6 +7,8 @@ import {
 	SET_FINISH,
 	SET_START,
 	SET_ACTIVE_ITEM,
+	SET_SHOW_LINK_DOTS,
+	SET_SHOW_NODE_TITLES,
 } from "~/actions/types";
 
 export const ONE_FIELD_SETTERS = {
@@ -15,6 +17,8 @@ export const ONE_FIELD_SETTERS = {
 	[SET_START]: "start",
 	[SET_FINISH]: "finish",
 	[SET_ACTIVE_ITEM]: "activeItem",
+	[SET_SHOW_LINK_DOTS]: "showLinkDots",
+	[SET_SHOW_NODE_TITLES]: "showNodeTitles",
 };
 
 export const getInitialState = () => {
@@ -76,6 +80,12 @@ export const getInitialState = () => {
 		distanceType: DijkstraSearch.BY_LINK_LENGTH,
 		start: null,
 		finish: null,
-		activeItem: { type: "NODE", name: "Lakethroat Shift" },
+		showLinkDots: true,
+		showNodeTitles: false,
+		activeItem: {
+			type: "LINK",
+			start: "Lakethroat Shift",
+			end: "Wildbison Loon",
+		},
 	};
 };

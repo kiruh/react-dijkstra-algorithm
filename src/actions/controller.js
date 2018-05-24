@@ -9,9 +9,9 @@ export const addNode = node => {
 	store.dispatch(setGraph(graph));
 };
 
-export const onNodeClick = (node, ctrl = false, shift = false) => {
+export const onNodeClick = (node, ctrl = false, delPressed = false) => {
 	const state = store.getState();
-	if (shift) {
+	if (delPressed) {
 		const graph = state.graph.copy();
 		graph.removeNode(node);
 		store.dispatch(setGraph(graph));
@@ -38,8 +38,8 @@ export const onNodeClick = (node, ctrl = false, shift = false) => {
 	);
 };
 
-export const onLinkClick = (link, shift) => {
-	if (shift) {
+export const onLinkClick = (link, delPressed = false) => {
+	if (delPressed) {
 		const state = store.getState();
 		const graph = state.graph.copy();
 

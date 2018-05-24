@@ -1,7 +1,8 @@
+import { floatToFixedIfNeeded } from "~/utils";
+
 export default class Node {
 	constructor({ name, weight, x, y }) {
 		this.name = name;
-		this.title = name;
 		this.weight = weight || 50;
 		this.x = x;
 		this.y = y;
@@ -21,5 +22,12 @@ export default class Node {
 	move(diffX, diffY) {
 		this.x += diffX;
 		this.y += diffY;
+	}
+
+	toString() {
+		const x = floatToFixedIfNeeded(this.x);
+		const y = floatToFixedIfNeeded(this.y);
+		const weight = floatToFixedIfNeeded(this.weight);
+		return `${this.name} (${x}, ${y}) ${weight} uof`;
 	}
 }

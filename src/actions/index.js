@@ -4,6 +4,8 @@ import {
 	SET_START,
 	SET_FINISH,
 	SET_ACTIVE_ITEM,
+	SET_SHOW_LINK_DOTS,
+	SET_SHOW_NODE_TITLES,
 } from "./types";
 
 export const oneFieldDispatch = (type, payload) => async dispatch => {
@@ -24,3 +26,9 @@ export const setDistanceType = payload =>
 
 export const setActiveItem = payload =>
 	oneFieldDispatch(SET_ACTIVE_ITEM, payload);
+
+export const setShowLinkDots = payload =>
+	oneFieldDispatch(SET_SHOW_LINK_DOTS, payload);
+
+export const setShowNodeTitles = payload =>
+	oneFieldDispatch(SET_SHOW_NODE_TITLES, payload);

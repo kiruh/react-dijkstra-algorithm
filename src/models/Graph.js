@@ -84,4 +84,25 @@ export default class Graph {
 		this.createPath(from, length, to);
 		this.createPath(to, length, from);
 	}
+
+	changeNodeName(node, newName) {
+		const { name } = node;
+		const nodes = this.nodeArray;
+
+		for (let i = 0; i < nodes.length; i += 1) {
+			const nd = nodes[i];
+
+			for (let j = 0; j < nd.paths.length; j += 1) {
+				const path = nd.paths[j];
+
+				if (path.toNodeName === name) {
+					path.toNodeName = newName;
+				}
+			}
+		}
+
+		this.nodes[newName] = this.nodes[name];
+		this.nodes[newName].name = newName;
+		delete this.nodes[name];
+	}
 }

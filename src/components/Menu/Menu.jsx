@@ -2,7 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
-import NodeInput from "./NodeInput";
+import LinkMenu from "./LinkMenu";
+import NodeMenu from "./NodeMenu";
 
 import styles from "./Menu.less";
 
@@ -11,13 +12,21 @@ class Menu extends React.Component {
 		if (!this.props.activeItem || this.props.activeItem.type !== "NODE") {
 			return null;
 		}
-		return <NodeInput />;
+		return <NodeMenu />;
+	}
+
+	renderLinkMenu() {
+		if (!this.props.activeItem || this.props.activeItem.type !== "LINK") {
+			return null;
+		}
+		return <LinkMenu />;
 	}
 
 	render() {
 		return (
 			<nav id="sidebar" className={styles.sidebar}>
 				{this.renderNodeMenu()}
+				{this.renderLinkMenu()}
 			</nav>
 		);
 	}

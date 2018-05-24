@@ -5,12 +5,13 @@ import { connect } from "react-redux";
 import Node from "~/models/Node";
 import MoveSelected from "./MoveSelected";
 import { onNodeClick } from "~/actions/controller";
+import { ACTIVE_COLOR, NODE_COLOR } from "~/constants";
 
 class NodeDrawing extends React.Component {
 	onMouseDown(event) {
 		const { node } = this.props;
 		MoveSelected.move(event, node);
-		onNodeClick(node, event.ctrlKey, event.shiftKey);
+		onNodeClick(node, event.ctrlKey);
 		event.stopPropagation();
 	}
 
@@ -21,30 +22,32 @@ class NodeDrawing extends React.Component {
 			activeItem.type === "NODE" &&
 			node.name === activeItem.name
 		) {
-			return "blue";
+			return ACTIVE_COLOR;
 		}
-		return "black";
+		return NODE_COLOR;
 	}
 
 	render() {
 		const { node } = this.props;
 		return (
-			<ellipse
-				fill={this.getFillColor()}
-				cx={node.x}
-				cy={node.y}
-				rx="10"
-				ry="10"
-				cursor="move"
-				onMouseDown={event => {
-					this.onMouseDown(event);
-				}}
-			>
-				<title>
-					{node.name} ( {node.x}, {node.y} );
-					&nbsp;&nbsp;&nbsp;weight: {node.weight};
-				</title>
-			</ellipse>
+			<g>
+				<ellipse
+					fill={this.getFillColor()}
+					cx={node.x}
+					cy={node.y}
+					rx="10"
+					ry="10"
+					cursor="move"
+					onMouseDown={event => {
+						this.onMouseDown(event);
+					}}
+				>
+					<title>{node.toString()}</title>
+				</ellipse>
+				<text x={node.x + 12} y={node.y + 4} className="small-svg-text">
+					{node.toString()}
+				</text>
+			</g>
 		);
 	}
 }
