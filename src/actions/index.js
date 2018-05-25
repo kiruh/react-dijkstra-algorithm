@@ -6,6 +6,8 @@ import {
 	SET_ACTIVE_ITEM,
 	SET_SHOW_LINK_DOTS,
 	SET_SHOW_PROPERTIES,
+	SET_SELECTED_NODES,
+	SET_ANSWERS,
 } from "./types";
 
 export const oneFieldDispatch = (type, payload) => async dispatch => {
@@ -32,3 +34,8 @@ export const setShowLinkDots = payload =>
 
 export const setShowProperties = payload =>
 	oneFieldDispatch(SET_SHOW_PROPERTIES, payload);
+
+export const setSelectedNodes = payload =>
+	oneFieldDispatch(SET_SELECTED_NODES, payload);
+
+export const setAnswers = payload => oneFieldDispatch(SET_ANSWERS, payload);

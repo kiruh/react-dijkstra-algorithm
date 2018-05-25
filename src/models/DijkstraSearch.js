@@ -40,8 +40,10 @@ export default class DijkstraSearch {
 
 			for (let i = 0; i < current.paths.length; i += 1) {
 				const link = current.paths[i];
-				if (link.toNodeName.name === finish) {
-					const path = [link.toNodeName];
+				const endPoint = graph.nodes[link.toNodeName];
+
+				if (endPoint.name === finish) {
+					const path = [endPoint];
 					let last = current;
 					while (last.name !== start) {
 						path.unshift(last);
@@ -51,24 +53,29 @@ export default class DijkstraSearch {
 					return path;
 				}
 
-				if (!tested.includes(link.toNodeName)) {
+				if (!tested.includes(endPoint)) {
 					const currentDistance = distances[current.name].dist;
 					const newDistance =
 						currentDistance +
-						DijkstraSearch.getDistance(current, link, distanceType);
+						DijkstraSearch.getDistance(
+							current,
+							link,
+							endPoint,
+							distanceType,
+						);
 
-					if (distances[link.toNodeName.name].dist > newDistance) {
-						distances[link.toNodeName.name] = {
+					if (distances[endPoint.name].dist > newDistance) {
+						distances[endPoint.name] = {
 							prev: current,
 							dist: newDistance,
 						};
 					}
 
-					const index = queue.indexOf(link.toNodeName);
+					const index = queue.indexOf(endPoint);
 					if (index !== -1) {
-						queue[index] = link.toNodeName;
+						queue[index] = endPoint;
 					} else {
-						queue.push(link.toNodeName);
+						queue.push(endPoint);
 					}
 				}
 			}
@@ -77,21 +84,21 @@ export default class DijkstraSearch {
 		return null;
 	}
 
-	static getDistance(node, link, distanceType) {
+	static getDistance(node, link, endPoint, distanceType) {
 		if (distanceType === DijkstraSearch.BY_LINK_LENGTH) {
 			return link.length;
 		}
 
 		if (distanceType === DijkstraSearch.BY_COORDINATES) {
 			const a = node;
-			const b = link.toNodeName;
+			const b = endPoint;
 			/* eslint-disable no-mixed-operators */
 			return Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2);
 			/* eslint-enable */
 		}
 
 		if (distanceType === DijkstraSearch.BY_WEIGHT) {
-			return link.toNodeName.weight;
+			return endPoint.weight;
 		}
 
 		return 0;

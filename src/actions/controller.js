@@ -1,5 +1,6 @@
 import store from "../store";
-import { setGraph, setActiveItem } from "./index";
+import DijkstraSearch from "~/models/DijkstraSearch";
+import { setGraph, setActiveItem, setSelectedNodes } from "./index";
 
 export const addNode = node => {
 	const state = store.getState();
@@ -15,6 +16,11 @@ export const onNodeClick = (node, ctrl = false, delPressed = false) => {
 		const graph = state.graph.copy();
 		graph.removeNode(node);
 		store.dispatch(setGraph(graph));
+
+		const selectedNodes = state.selectedNodes.filter(
+			n => n.name !== node.name,
+		);
+		store.dispatch(setSelectedNodes(selectedNodes));
 		return;
 	}
 	if (
@@ -61,4 +67,19 @@ export const onLinkClick = (link, delPressed = false) => {
 
 export const changeGraph = graph => {
 	store.dispatch(setGraph(graph));
+};
+
+export const searchGraph = () => {
+	const state = store.getState();
+	const { selectedNodes, graph } = state;
+	const answers = selectedNodes.slice(1).map((node, index) => {
+		const prev = selectedNodes[index];
+		const a = graph.search(
+			prev.name,
+			node.name,
+			DijkstraSearch.BY_COORDINATES,
+		);
+		return a;
+	});
+	console.log(answers);
 };
