@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import * as d3 from "d3";
 import { connect } from "react-redux";
 
+import Graph from "~/models/Graph";
 import { onLinkClick } from "~/actions/controller";
 import { getEquationOfLineFromTwoPoints } from "~/utils";
 import { ACTIVE_COLOR, LINK_COLOR } from "~/constants";
@@ -35,6 +36,13 @@ class LinkDrawing extends React.Component {
 
 	get arrow() {
 		return this.isActive ? "arrow-active" : "arrow";
+	}
+
+	get link() {
+		const { link } = this.props;
+		const { start, end } = link;
+		const node = this.props.graph.nodes[start.name];
+		return node.paths.find(p => p.toNodeName === end.name);
 	}
 
 	draw() {
@@ -77,27 +85,41 @@ class LinkDrawing extends React.Component {
 	}
 
 	renderCircle() {
-		const { link } = this.props;
+		const { link, showLinkDots, showProperties } = this.props;
 		const { start, end } = link;
 		const { gradient } = getEquationOfLineFromTwoPoints(start, end);
 
 		const cx = end.x - (end.x - start.x) / 2;
 		const cy = end.y - (end.y - start.y) / 2;
 
-		const renderCircle = (x, y) => (
-			<ellipse
-				onMouseDown={event => {
-					onLinkClick(link);
-					event.stopPropagation();
-				}}
-				cursor="move"
-				fill={this.color}
-				cx={x}
-				cy={y}
-				rx="3px"
-				ry="3px"
-			/>
-		);
+		const renderCircle = (x, y) => {
+			const textX = showLinkDots ? x + 6 : x;
+			const textY = showLinkDots ? y + 4 : y;
+
+			return (
+				<g>
+					{showLinkDots && (
+						<ellipse
+							onMouseDown={event => {
+								onLinkClick(link);
+								event.stopPropagation();
+							}}
+							cursor="move"
+							fill={this.color}
+							cx={x}
+							cy={y}
+							rx="3px"
+							ry="3px"
+						/>
+					)}
+					{showProperties && (
+						<text x={textX} y={textY} className="small-svg-text">
+							{this.link.length} u.
+						</text>
+					)}
+				</g>
+			);
+		};
 
 		if (start.y === end.y) {
 			const x = cx;
@@ -120,7 +142,7 @@ class LinkDrawing extends React.Component {
 
 			return renderCircle(x, y);
 		} catch (error) {
-			// DO NOTHING
+			// console.error(error);
 		}
 		return null;
 	}
@@ -140,12 +162,18 @@ class LinkDrawing extends React.Component {
 }
 
 LinkDrawing.propTypes = {
+	graph: PropTypes.instanceOf(Graph).isRequired,
 	link: PropTypes.objectOf(PropTypes.any).isRequired,
 	activeItem: PropTypes.objectOf(PropTypes.any),
+	showLinkDots: PropTypes.bool.isRequired,
+	showProperties: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = state => ({
+	graph: state.graph,
 	activeItem: state.activeItem,
+	showLinkDots: state.showLinkDots,
+	showProperties: state.showProperties,
 });
 
 export default connect(mapStateToProps, null)(LinkDrawing);

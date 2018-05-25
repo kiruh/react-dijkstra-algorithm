@@ -8,7 +8,7 @@ import {
 	SET_START,
 	SET_ACTIVE_ITEM,
 	SET_SHOW_LINK_DOTS,
-	SET_SHOW_NODE_TITLES,
+	SET_SHOW_PROPERTIES,
 } from "~/actions/types";
 
 export const ONE_FIELD_SETTERS = {
@@ -18,7 +18,7 @@ export const ONE_FIELD_SETTERS = {
 	[SET_FINISH]: "finish",
 	[SET_ACTIVE_ITEM]: "activeItem",
 	[SET_SHOW_LINK_DOTS]: "showLinkDots",
-	[SET_SHOW_NODE_TITLES]: "showNodeTitles",
+	[SET_SHOW_PROPERTIES]: "showProperties",
 };
 
 export const getInitialState = () => {
@@ -81,7 +81,7 @@ export const getInitialState = () => {
 		start: null,
 		finish: null,
 		showLinkDots: true,
-		showNodeTitles: false,
+		showProperties: false,
 		activeItem: {
 			type: "LINK",
 			start: "Lakethroat Shift",

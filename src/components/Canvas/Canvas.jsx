@@ -15,6 +15,7 @@ import styles from "./Canvas.less";
 
 class Canvas extends React.Component {
 	static renderDefs() {
+		// d="M2,2 L10,6 L2,10 L6,6 L2,2"
 		return (
 			<defs>
 				<marker
@@ -23,12 +24,12 @@ class Canvas extends React.Component {
 					markerWidth="12"
 					markerHeight="12"
 					viewBox="0 0 12 12"
-					refX="15"
-					refY="6"
+					refX="10"
+					refY="3"
 					orient="auto"
 				>
 					<path
-						d="M2,2 L10,6 L2,10 L6,6 L2,2"
+						d="M0,0 L6,3 L0,6 L0,0"
 						style={{ fill: LINK_COLOR }}
 					/>
 				</marker>
@@ -38,12 +39,12 @@ class Canvas extends React.Component {
 					markerWidth="12"
 					markerHeight="12"
 					viewBox="0 0 12 12"
-					refX="15"
-					refY="6"
+					refX="10"
+					refY="3"
 					orient="auto"
 				>
 					<path
-						d="M2,2 L10,6 L2,10 L6,6 L2,2"
+						d="M0,0 L6,3 L0,6 L0,0"
 						style={{ fill: ACTIVE_COLOR }}
 					/>
 				</marker>
@@ -60,7 +61,7 @@ class Canvas extends React.Component {
 				similar = this.props.graph.nodes[name];
 			}
 			const node = new Node({
-				name: sillyName(),
+				name,
 				x: event.clientX - this.offsetX,
 				y: event.clientY - this.offsetY,
 			});

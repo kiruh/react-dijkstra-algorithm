@@ -8,6 +8,7 @@ import { changeGraph } from "~/actions/controller";
 
 class LinkMenu extends React.Component {
 	onLengthChange(value) {
+		if (value <= 0) return;
 		const { activeItem } = this.props;
 		const { start, end } = activeItem;
 		const graph = this.props.graph.copy();

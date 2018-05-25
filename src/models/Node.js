@@ -28,6 +28,6 @@ export default class Node {
 		const x = floatToFixedIfNeeded(this.x);
 		const y = floatToFixedIfNeeded(this.y);
 		const weight = floatToFixedIfNeeded(this.weight);
-		return `${this.name} (${x}, ${y}) ${weight} uof`;
+		return `${this.name} (${x}, ${y}) ${weight} u.`;
 	}
 }

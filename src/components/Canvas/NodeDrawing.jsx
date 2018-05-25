@@ -27,6 +27,17 @@ class NodeDrawing extends React.Component {
 		return NODE_COLOR;
 	}
 
+	renderTitle() {
+		const { node, showProperties } = this.props;
+		if (!showProperties) return null;
+
+		return (
+			<text x={node.x + 12} y={node.y + 4} className="small-svg-text">
+				{node.toString()}
+			</text>
+		);
+	}
+
 	render() {
 		const { node } = this.props;
 		return (
@@ -44,9 +55,7 @@ class NodeDrawing extends React.Component {
 				>
 					<title>{node.toString()}</title>
 				</ellipse>
-				<text x={node.x + 12} y={node.y + 4} className="small-svg-text">
-					{node.toString()}
-				</text>
+				{this.renderTitle()}
 			</g>
 		);
 	}
@@ -55,10 +64,12 @@ class NodeDrawing extends React.Component {
 NodeDrawing.propTypes = {
 	node: PropTypes.instanceOf(Node).isRequired,
 	activeItem: PropTypes.objectOf(PropTypes.any),
+	showProperties: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = state => ({
 	activeItem: state.activeItem,
+	showProperties: state.showProperties,
 });
 
 export default connect(mapStateToProps, null)(NodeDrawing);

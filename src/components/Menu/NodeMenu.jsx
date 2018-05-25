@@ -22,6 +22,8 @@ class NodeMenu extends React.Component {
 	}
 
 	onNumberInputChange(value, field) {
+		if (field === "weight" && value <= 0) return;
+
 		const graph = this.props.graph.copy();
 		graph.nodes[this.node.name][field] = Number(value);
 		changeGraph(graph);
