@@ -1,5 +1,4 @@
 import store from "../store";
-import DijkstraSearch from "~/models/DijkstraSearch";
 import { setGraph, setActiveItem, setAnswers } from "./index";
 
 export const addNode = node => {
@@ -65,17 +64,15 @@ export const changeGraph = graph => {
 	store.dispatch(setGraph(graph));
 };
 
-export const searchGraph = selectedNodes => {
+export const searchGraph = (selectedNodes = []) => {
 	const state = store.getState();
-	const { graph } = state;
+	const { graph, distanceType } = state;
+
+	if (selectedNodes.length <= 1) return;
 
 	const answers = selectedNodes.slice(1).map((node, index) => {
 		const prev = selectedNodes[index];
-		const a = graph.search(
-			prev.name,
-			node.name,
-			DijkstraSearch.BY_COORDINATES,
-		);
+		const a = graph.search(prev.name, node.name, distanceType);
 		return a;
 	});
 
@@ -85,4 +82,12 @@ export const searchGraph = selectedNodes => {
 
 export const clearAnswers = () => {
 	store.dispatch(setAnswers(null));
+};
+
+export const udpateAnswers = selectedNodes => {
+	const state = store.getState();
+	const { answers } = state;
+
+	if (answers && selectedNodes.length > 1) searchGraph(selectedNodes);
+	else clearAnswers();
 };

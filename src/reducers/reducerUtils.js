@@ -4,8 +4,6 @@ import DijkstraSearch from "~/models/DijkstraSearch";
 import {
 	SET_GRAPH,
 	SET_DISTANCE_TYPE,
-	SET_FINISH,
-	SET_START,
 	SET_ACTIVE_ITEM,
 	SET_SHOW_LINK_DOTS,
 	SET_SHOW_PROPERTIES,
@@ -15,8 +13,6 @@ import {
 export const ONE_FIELD_SETTERS = {
 	[SET_GRAPH]: "graph",
 	[SET_DISTANCE_TYPE]: "distanceType",
-	[SET_START]: "start",
-	[SET_FINISH]: "finish",
 	[SET_ACTIVE_ITEM]: "activeItem",
 	[SET_SHOW_LINK_DOTS]: "showLinkDots",
 	[SET_SHOW_PROPERTIES]: "showProperties",
@@ -80,8 +76,6 @@ export const getInitialState = () => {
 	return {
 		graph,
 		distanceType: DijkstraSearch.BY_LINK_LENGTH,
-		start: null,
-		finish: null,
 		showLinkDots: true,
 		showProperties: false,
 		activeItem: null,

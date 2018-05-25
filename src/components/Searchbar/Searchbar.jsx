@@ -4,7 +4,9 @@ import { connect } from "react-redux";
 
 import NodeSelect from "./NodeSelect";
 import Graph from "~/models/Graph";
-import { searchGraph, clearAnswers } from "~/actions/controller";
+import DistanceType from "./DistanceType";
+import { searchGraph, clearAnswers, udpateAnswers } from "~/actions/controller";
+import { COLORS, DANGER_COLOR } from "~/constants";
 
 import styles from "./Searchbar.less";
 
@@ -14,6 +16,59 @@ class Searchbar extends React.Component {
 			node => !!props.graph.nodes[node.name],
 		);
 		return { ...state, selectedNodes };
+	}
+
+	static getTransparentColor(color) {
+		return `${color}0D`;
+	}
+
+	static renderNoFound(answer, index) {
+		const color = COLORS[index];
+		return (
+			<div
+				key={index}
+				className="alert"
+				style={{
+					borderLeft: `5px solid ${DANGER_COLOR}`,
+					backgroundColor: Searchbar.getTransparentColor(color),
+				}}
+			>
+				No path from {answer.start} to {answer.end}{" "}
+				<i
+					className="fas fa-exclamation-circle"
+					style={{ color: DANGER_COLOR }}
+				/>
+			</div>
+		);
+	}
+
+	static renderFound(answer, index) {
+		const color = COLORS[index];
+		const pathInfo = answer.path.reduce((pthinf, node) => {
+			const arr = pthinf;
+			if (arr.length) {
+				arr.push(
+					<i
+						className="fas fa-arrow-circle-right"
+						style={{ color: "#9E9E9E" }}
+					/>,
+				);
+			}
+			arr.push(<span> {node.name} </span>);
+			return arr;
+		}, []);
+		return (
+			<div
+				key={index}
+				className="alert"
+				style={{
+					borderLeft: `5px solid ${color}`,
+					backgroundColor: Searchbar.getTransparentColor(color),
+				}}
+			>
+				{pathInfo}
+			</div>
+		);
 	}
 
 	constructor(props) {
@@ -29,7 +84,7 @@ class Searchbar extends React.Component {
 
 	setSelectedNodes(selectedNodes) {
 		this.setState({ selectedNodes });
-		clearAnswers();
+		udpateAnswers(selectedNodes);
 	}
 
 	renderNodeSelect() {
@@ -59,6 +114,20 @@ class Searchbar extends React.Component {
 		);
 	}
 
+	renderClearNodeSelectButton() {
+		if (this.props.answers) return null;
+		return (
+			<button
+				className="btn ml-2"
+				onClick={() => {
+					this.setSelectedNodes([]);
+				}}
+			>
+				Clear All
+			</button>
+		);
+	}
+
 	renderClearAnswersButton() {
 		if (!this.props.answers) return null;
 		return (
@@ -75,35 +144,42 @@ class Searchbar extends React.Component {
 
 	renderAnswers() {
 		if (!this.props.answers) return null;
-		return this.props.answers.map((answer, index) => {
+		const answersDOM = this.props.answers.map((answer, index) => {
 			if (!answer.path) {
-				return (
-					<div key={index} className="alert alert-warning">
-						No path from {answer.start} to {answer.end}
-					</div>
-				);
+				return Searchbar.renderNoFound(answer, index);
 			}
-			const pathInfo = answer.path.reduce((pthinf, node) => {
-				if (!pthinf) return node.name;
-				return `${pthinf} > ${node.name}`;
-			}, null);
-			return (
-				<div key={index} className="alert alert-info">
-					{pathInfo}
-				</div>
-			);
+			return Searchbar.renderFound(answer, index);
 		});
+		return <div className="mt-4">{answersDOM}</div>;
+	}
+
+	renderDistanceType() {
+		return (
+			<DistanceType
+				onChange={() => {
+					udpateAnswers(this.state.selectedNodes);
+				}}
+			/>
+		);
+	}
+
+	renderButtons() {
+		return (
+			<div className="mt-4">
+				{this.renderSearchButton()}
+				{this.renderClearNodeSelectButton()}
+				{this.renderClearAnswersButton()}
+			</div>
+		);
 	}
 
 	render() {
 		return (
 			<nav id="searchbar" className={styles.searchbar}>
 				{this.renderNodeSelect()}
-				<div className="mt-4">
-					{this.renderSearchButton()}
-					{this.renderClearAnswersButton()}
-				</div>
-				<div className="mt-4">{this.renderAnswers()}</div>
+				{this.renderDistanceType()}
+				{this.renderButtons()}
+				{this.renderAnswers()}
 			</nav>
 		);
 	}
