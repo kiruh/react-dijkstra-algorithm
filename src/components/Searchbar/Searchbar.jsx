@@ -29,6 +29,7 @@ class Searchbar extends React.Component {
 
 	setSelectedNodes(selectedNodes) {
 		this.setState({ selectedNodes });
+		clearAnswers();
 	}
 
 	renderNodeSelect() {
@@ -82,13 +83,13 @@ class Searchbar extends React.Component {
 					</div>
 				);
 			}
-			const pathTitle = answer.path.reduce((pthttl, node) => {
-				if (!pthttl) return node.name;
-				return `${pthttl} > ${node.name}`;
-			}, "");
+			const pathInfo = answer.path.reduce((pthinf, node) => {
+				if (!pthinf) return node.name;
+				return `${pthinf} > ${node.name}`;
+			}, null);
 			return (
 				<div key={index} className="alert alert-info">
-					{pathTitle}
+					{pathInfo}
 				</div>
 			);
 		});

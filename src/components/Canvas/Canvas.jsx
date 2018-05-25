@@ -1,14 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
 import sillyName from "sillyname";
-import uuidv4 from "uuid/v4";
 import { connect } from "react-redux";
 
 import Graph from "~/models/Graph";
 import NodeDrawing from "./NodeDrawing";
 import Node from "~/models/Node";
 import LinkDrawing from "./LinkDrawing";
-import { setActiveItem } from "~/actions/index";
+import Answers from "./Answers";
+import { setActiveItem } from "~/actions";
 import { addNode } from "~/actions/controller";
 import { ACTIVE_COLOR, LINK_COLOR, FADE_COLOR, COLORS } from "~/constants";
 
@@ -16,6 +16,7 @@ import styles from "./Canvas.less";
 
 class Canvas extends React.Component {
 	static renderArrow(color) {
+		// d="M2,2 L10,6 L2,10 L6,6 L2,2"
 		return (
 			<marker
 				key={color}
@@ -38,7 +39,6 @@ class Canvas extends React.Component {
 	}
 
 	static renderDefs() {
-		// d="M2,2 L10,6 L2,10 L6,6 L2,2"
 		return (
 			<defs>
 				{Canvas.renderArrow(LINK_COLOR)}
@@ -126,87 +126,14 @@ class Canvas extends React.Component {
 		));
 	}
 
-	renderAnswers() {
-		const linkArray = [...this.props.graph.linkArray];
-		const nodeArray = [...this.props.graph.nodeArray];
-
-		const drawnNodes = [];
-		const drawnLinks = [];
-
-		const nodeDom = [];
-		const linkDom = [];
-
-		this.props.answers.forEach((answer, j) => {
-			const color = COLORS[j];
-			if (!answer.path) return;
-			answer.path.forEach((node, index) => {
-				nodeDom.push(
-					<NodeDrawing
-						key={uuidv4()}
-						node={node}
-						color={color}
-						notClickable
-					/>,
-				);
-				drawnNodes.push(node);
-				if (index > 0) {
-					const prev = answer.path[index - 1];
-					const link = linkArray.find(
-						lnk =>
-							lnk.start.name === prev.name &&
-							lnk.end.name === node.name,
-					);
-					linkDom.push(
-						<LinkDrawing
-							key={uuidv4()}
-							link={link}
-							color={color}
-							notClickable
-						/>,
-					);
-					drawnLinks.push(link);
-				}
-			});
-		});
-
-		nodeArray.forEach(node => {
-			const drawn = drawnNodes.some(n => n.name === node.name);
-			if (!drawn) {
-				nodeDom.unshift(
-					<NodeDrawing
-						key={node.name}
-						node={node}
-						color={FADE_COLOR}
-						notClickable
-					/>,
-				);
-			}
-		});
-
-		linkArray.forEach(link => {
-			const drawn = drawnLinks.some(
-				lnk =>
-					lnk.start.name === link.start.name &&
-					lnk.end.name === link.end.name,
-			);
-			if (!drawn) {
-				linkDom.unshift(
-					<LinkDrawing
-						key={`${link.start.name}->${link.end.name}`}
-						link={link}
-						color={FADE_COLOR}
-						notClickable
-					/>,
-				);
-			}
-		});
-
-		return [...linkDom, ...nodeDom];
-	}
-
 	renderContent() {
 		if (this.props.answers) {
-			return this.renderAnswers();
+			return (
+				<Answers
+					graph={this.props.graph}
+					answers={this.props.answers}
+				/>
+			);
 		}
 		return (
 			<React.Fragment>

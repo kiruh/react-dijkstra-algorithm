@@ -19,6 +19,11 @@ class LinkDrawing extends React.Component {
 		this.draw();
 	}
 
+	onLinkClick(event) {
+		onLinkClick(this.props.link);
+		event.stopPropagation();
+	}
+
 	get isActive() {
 		const { link, activeItem } = this.props;
 		const { start, end } = link;
@@ -43,6 +48,18 @@ class LinkDrawing extends React.Component {
 		const { start, end } = link;
 		const node = this.props.graph.nodes[start.name];
 		return node.paths.find(p => p.toNodeName === end.name);
+	}
+
+	get moveableProps() {
+		const { notClickable } = this.props;
+		if (notClickable) return {};
+
+		return {
+			onMouseDown: event => {
+				this.onLinkClick(event);
+			},
+			cursor: "move",
+		};
 	}
 
 	draw() {
@@ -71,11 +88,7 @@ class LinkDrawing extends React.Component {
 		const { start, end } = link;
 		return (
 			<line
-				onMouseDown={event => {
-					onLinkClick(link);
-					event.stopPropagation();
-				}}
-				cursor="move"
+				{...this.moveableProps}
 				stroke="transparent"
 				strokeWidth="10px"
 				x1={start.x}
@@ -87,7 +100,7 @@ class LinkDrawing extends React.Component {
 	}
 
 	renderCircle() {
-		const { link, showLinkDots, showProperties, notClickable } = this.props;
+		const { link, showLinkDots, showProperties } = this.props;
 		const { start, end } = link;
 		const { gradient } = getEquationOfLineFromTwoPoints(start, end);
 
@@ -97,21 +110,12 @@ class LinkDrawing extends React.Component {
 		const renderCircle = (x, y) => {
 			const textX = showLinkDots ? x + 6 : x;
 			const textY = showLinkDots ? y + 4 : y;
-			const moveableProps = !notClickable
-				? {
-						onMouseDown: event => {
-							onLinkClick(link);
-							event.stopPropagation();
-						},
-						cursor: "move",
-					}
-				: {};
 
 			return (
 				<g>
 					{showLinkDots && (
 						<ellipse
-							{...moveableProps}
+							{...this.moveableProps}
 							fill={this.color}
 							cx={x}
 							cy={y}

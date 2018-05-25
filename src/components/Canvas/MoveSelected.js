@@ -1,6 +1,5 @@
 /* eslint-env browser */
 import store from "~/store";
-
 import { setGraph } from "~/actions/index";
 
 export default class MoveSelected {

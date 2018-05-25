@@ -25,16 +25,17 @@ class NodeDrawing extends React.Component {
 		};
 	}
 
-	get color() {
+	get isActive() {
 		const { node, activeItem } = this.props;
-		if (
+		return (
 			activeItem &&
 			activeItem.type === "NODE" &&
 			node.name === activeItem.name
-		) {
-			return ACTIVE_COLOR;
-		}
-		return this.props.color;
+		);
+	}
+
+	get color() {
+		return this.isActive ? ACTIVE_COLOR : this.props.color;
 	}
 
 	renderTitle() {
