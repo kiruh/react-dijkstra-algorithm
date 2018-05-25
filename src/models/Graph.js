@@ -46,7 +46,12 @@ export default class Graph {
 	}
 
 	search(start, end, distanceType) {
-		return DijkstraSearch.search(start, end, this, distanceType);
+		const path = DijkstraSearch.search(start, end, this, distanceType);
+		return {
+			start,
+			end,
+			path,
+		};
 	}
 
 	copy() {

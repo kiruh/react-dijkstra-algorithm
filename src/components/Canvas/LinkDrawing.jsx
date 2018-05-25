@@ -31,11 +31,11 @@ class LinkDrawing extends React.Component {
 	}
 
 	get color() {
-		return this.isActive ? ACTIVE_COLOR : LINK_COLOR;
+		return this.isActive ? ACTIVE_COLOR : this.props.color;
 	}
 
 	get arrow() {
-		return this.isActive ? "arrow-active" : "arrow";
+		return `arrow-${this.color}`;
 	}
 
 	get link() {
@@ -65,7 +65,9 @@ class LinkDrawing extends React.Component {
 	}
 
 	renderClickableLine() {
-		const { link } = this.props;
+		const { link, notClickable } = this.props;
+		if (notClickable) return null;
+
 		const { start, end } = link;
 		return (
 			<line
@@ -85,7 +87,7 @@ class LinkDrawing extends React.Component {
 	}
 
 	renderCircle() {
-		const { link, showLinkDots, showProperties } = this.props;
+		const { link, showLinkDots, showProperties, notClickable } = this.props;
 		const { start, end } = link;
 		const { gradient } = getEquationOfLineFromTwoPoints(start, end);
 
@@ -95,16 +97,21 @@ class LinkDrawing extends React.Component {
 		const renderCircle = (x, y) => {
 			const textX = showLinkDots ? x + 6 : x;
 			const textY = showLinkDots ? y + 4 : y;
+			const moveableProps = !notClickable
+				? {
+						onMouseDown: event => {
+							onLinkClick(link);
+							event.stopPropagation();
+						},
+						cursor: "move",
+					}
+				: {};
 
 			return (
 				<g>
 					{showLinkDots && (
 						<ellipse
-							onMouseDown={event => {
-								onLinkClick(link);
-								event.stopPropagation();
-							}}
-							cursor="move"
+							{...moveableProps}
 							fill={this.color}
 							cx={x}
 							cy={y}
@@ -161,12 +168,18 @@ class LinkDrawing extends React.Component {
 	}
 }
 
+LinkDrawing.defaultProps = {
+	color: LINK_COLOR,
+};
+
 LinkDrawing.propTypes = {
 	graph: PropTypes.instanceOf(Graph).isRequired,
 	link: PropTypes.objectOf(PropTypes.any).isRequired,
 	activeItem: PropTypes.objectOf(PropTypes.any),
 	showLinkDots: PropTypes.bool.isRequired,
 	showProperties: PropTypes.bool.isRequired,
+	color: PropTypes.string.isRequired,
+	notClickable: PropTypes.bool,
 };
 
 const mapStateToProps = state => ({

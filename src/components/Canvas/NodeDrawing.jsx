@@ -15,7 +15,17 @@ class NodeDrawing extends React.Component {
 		event.stopPropagation();
 	}
 
-	getFillColor() {
+	getMoveableProps() {
+		if (this.props.notClickable) return {};
+		return {
+			onMouseDown: event => {
+				this.onMouseDown(event);
+			},
+			cursor: "move",
+		};
+	}
+
+	get color() {
 		const { node, activeItem } = this.props;
 		if (
 			activeItem &&
@@ -24,7 +34,7 @@ class NodeDrawing extends React.Component {
 		) {
 			return ACTIVE_COLOR;
 		}
-		return NODE_COLOR;
+		return this.props.color;
 	}
 
 	renderTitle() {
@@ -40,18 +50,16 @@ class NodeDrawing extends React.Component {
 
 	render() {
 		const { node } = this.props;
+
 		return (
 			<g>
 				<ellipse
-					fill={this.getFillColor()}
+					fill={this.color}
 					cx={node.x}
 					cy={node.y}
 					rx="10"
 					ry="10"
-					cursor="move"
-					onMouseDown={event => {
-						this.onMouseDown(event);
-					}}
+					{...this.getMoveableProps()}
 				>
 					<title>{node.toString()}</title>
 				</ellipse>
@@ -61,10 +69,16 @@ class NodeDrawing extends React.Component {
 	}
 }
 
+NodeDrawing.defaultProps = {
+	color: NODE_COLOR,
+};
+
 NodeDrawing.propTypes = {
 	node: PropTypes.instanceOf(Node).isRequired,
 	activeItem: PropTypes.objectOf(PropTypes.any),
 	showProperties: PropTypes.bool.isRequired,
+	color: PropTypes.string.isRequired,
+	notClickable: PropTypes.bool,
 };
 
 const mapStateToProps = state => ({

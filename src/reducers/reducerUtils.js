@@ -9,7 +9,6 @@ import {
 	SET_ACTIVE_ITEM,
 	SET_SHOW_LINK_DOTS,
 	SET_SHOW_PROPERTIES,
-	SET_SELECTED_NODES,
 	SET_ANSWERS,
 } from "~/actions/types";
 
@@ -21,7 +20,6 @@ export const ONE_FIELD_SETTERS = {
 	[SET_ACTIVE_ITEM]: "activeItem",
 	[SET_SHOW_LINK_DOTS]: "showLinkDots",
 	[SET_SHOW_PROPERTIES]: "showProperties",
-	[SET_SELECTED_NODES]: "selectedNodes",
 	[SET_ANSWERS]: "answers",
 };
 
@@ -86,12 +84,7 @@ export const getInitialState = () => {
 		finish: null,
 		showLinkDots: true,
 		showProperties: false,
-		activeItem: {
-			type: "LINK",
-			start: "Lakethroat Shift",
-			end: "Wildbison Loon",
-		},
-		selectedNodes: [e, f],
-		answers: [],
+		activeItem: null,
+		answers: null,
 	};
 };

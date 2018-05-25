@@ -1,6 +1,6 @@
 import store from "../store";
 import DijkstraSearch from "~/models/DijkstraSearch";
-import { setGraph, setActiveItem, setSelectedNodes } from "./index";
+import { setGraph, setActiveItem, setAnswers } from "./index";
 
 export const addNode = node => {
 	const state = store.getState();
@@ -17,10 +17,6 @@ export const onNodeClick = (node, ctrl = false, delPressed = false) => {
 		graph.removeNode(node);
 		store.dispatch(setGraph(graph));
 
-		const selectedNodes = state.selectedNodes.filter(
-			n => n.name !== node.name,
-		);
-		store.dispatch(setSelectedNodes(selectedNodes));
 		return;
 	}
 	if (
@@ -69,9 +65,10 @@ export const changeGraph = graph => {
 	store.dispatch(setGraph(graph));
 };
 
-export const searchGraph = () => {
+export const searchGraph = selectedNodes => {
 	const state = store.getState();
-	const { selectedNodes, graph } = state;
+	const { graph } = state;
+
 	const answers = selectedNodes.slice(1).map((node, index) => {
 		const prev = selectedNodes[index];
 		const a = graph.search(
@@ -81,5 +78,11 @@ export const searchGraph = () => {
 		);
 		return a;
 	});
-	console.log(answers);
+
+	store.dispatch(setActiveItem(null));
+	store.dispatch(setAnswers(answers));
+};
+
+export const clearAnswers = () => {
+	store.dispatch(setAnswers(null));
 };
