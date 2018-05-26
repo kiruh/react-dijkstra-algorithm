@@ -25,6 +25,7 @@ class NodeSelect extends React.Component {
 				labelKey="name"
 				valueKey="name"
 				clearable={false}
+				noResultsText="You haven't created any nodes yet."
 			/>
 		);
 	}

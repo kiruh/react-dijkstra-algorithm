@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import sillyName from "sillyname";
+import sillyname from "sillyname";
 import { connect } from "react-redux";
 
 import Graph from "~/models/Graph";
@@ -56,7 +56,7 @@ class Canvas extends React.Component {
 			let name;
 			let similar = true;
 			while (similar) {
-				name = sillyName();
+				name = sillyname().split(" ")[Math.round(Math.random())];
 				similar = this.props.graph.nodes[name];
 			}
 			const node = new Node({

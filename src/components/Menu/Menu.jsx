@@ -7,6 +7,7 @@ import NodeMenu from "./NodeMenu";
 import { setShowLinkDots, setShowProperties } from "~/actions";
 
 import styles from "./Menu.less";
+import ImportExport from "./ImportExport";
 
 class Menu extends React.Component {
 	renderNodeMenu() {
@@ -73,6 +74,7 @@ class Menu extends React.Component {
 					{this.renderShowLinkDotsToggle()}
 					{this.renderShowPropertiesToggle()}
 				</div>
+				<ImportExport />
 			</nav>
 		);
 	}

@@ -60,7 +60,12 @@ export const onLinkClick = (link, delPressed = false) => {
 	);
 };
 
+export const clearAnswers = () => {
+	store.dispatch(setAnswers(null));
+};
+
 export const changeGraph = graph => {
+	clearAnswers();
 	store.dispatch(setGraph(graph));
 };
 
@@ -78,10 +83,6 @@ export const searchGraph = (selectedNodes = []) => {
 
 	store.dispatch(setActiveItem(null));
 	store.dispatch(setAnswers(answers));
-};
-
-export const clearAnswers = () => {
-	store.dispatch(setAnswers(null));
 };
 
 export const udpateAnswers = selectedNodes => {

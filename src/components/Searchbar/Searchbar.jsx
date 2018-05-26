@@ -9,6 +9,7 @@ import { searchGraph, clearAnswers, udpateAnswers } from "~/actions/controller";
 import { COLORS, DANGER_COLOR } from "~/constants";
 
 import styles from "./Searchbar.less";
+import Footer from "./Footer";
 
 class Searchbar extends React.Component {
 	static getDerivedStateFromProps(props, state) {
@@ -118,12 +119,13 @@ class Searchbar extends React.Component {
 		if (this.props.answers) return null;
 		return (
 			<button
-				className="btn ml-2"
+				className="btn btn-light ml-2"
 				onClick={() => {
 					this.setSelectedNodes([]);
 				}}
+				title={"Remove selected nodes"}
 			>
-				Clear All
+				<i className="fas fa-times" />
 			</button>
 		);
 	}
@@ -136,8 +138,9 @@ class Searchbar extends React.Component {
 				onClick={() => {
 					clearAnswers();
 				}}
+				title="Clear Search Results"
 			>
-				Clear Search
+				Clear Search Results
 			</button>
 		);
 	}
@@ -180,6 +183,7 @@ class Searchbar extends React.Component {
 				{this.renderDistanceType()}
 				{this.renderButtons()}
 				{this.renderAnswers()}
+				<Footer />
 			</nav>
 		);
 	}

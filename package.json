@@ -38,9 +38,7 @@
 	},
 	"eslintConfig": {
 		"extends": "airbnb",
-		"plugins": [
-			"import"
-		]
+		"plugins": ["import"]
 	},
 	"dependencies": {
 		"algebra.js": "^0.2.6",
@@ -51,15 +49,12 @@
 		"pm2": "^2.10.2",
 		"prop-types": "^15.6.0",
 		"random-color": "^1.0.1",
-		"rc-slider": "^8.6.1",
 		"react": "^16.3.2",
-		"react-color": "^2.14.1",
 		"react-dom": "^16.3.2",
 		"react-key-handler": "^1.0.1",
 		"react-redux": "^5.0.6",
 		"react-router-dom": "^4.2.2",
 		"react-select": "^1.2.1",
-		"reactstrap": "^5.0.0",
 		"redux": "^3.7.1",
 		"redux-logger": "^3.0.6",
 		"redux-thunk": "^2.2.0",

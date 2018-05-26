@@ -2,6 +2,7 @@ import _ from "lodash";
 import Link from "./Link";
 import DijkstraSearch from "./DijkstraSearch";
 import { getMinProperty, getMaxProperty } from "~/utils";
+import Node from "./Node";
 
 export default class Graph {
 	constructor() {
@@ -17,6 +18,7 @@ export default class Graph {
 					...nls,
 					{
 						start: node,
+						length: link.length,
 						end,
 					},
 				];
@@ -109,5 +111,63 @@ export default class Graph {
 		this.nodes[newName] = this.nodes[name];
 		this.nodes[newName].name = newName;
 		delete this.nodes[name];
+	}
+
+	toJSON() {
+		const nodes = this.nodeArray.map(node => node.toJSON());
+		const links = this.linkArray.map(link => ({
+			start: link.start.name,
+			length: link.length,
+			end: link.end.name,
+		}));
+		return {
+			nodes,
+			links,
+		};
+	}
+
+	static fromJSON({ nodes, links }) {
+		const graph = new Graph();
+
+		nodes.forEach(nd => {
+			const { name } = nd;
+
+			const weight = Number(nd.weight);
+			const x = Number(nd.x);
+			const y = Number(nd.y);
+
+			if (!name || !weight || !x || !y) {
+				console.warn("Invalid node, skipped.", nd);
+				return;
+			}
+			const node = new Node({
+				name,
+				weight,
+				x,
+				y,
+			});
+			graph.insertNode(node);
+		});
+
+		links.forEach(link => {
+			const { start, end } = link;
+			const length = Number(link.length);
+
+			if (!start || !end || !length) {
+				console.warn("Invalid link, skipped.", link);
+				return;
+			}
+
+			const from = graph.nodes[start];
+			const to = graph.nodes[end];
+			if (!from || !to) {
+				console.warn("Invalid link, skipped.", link);
+				return;
+			}
+
+			graph.createPath(from, length, to);
+		});
+
+		return graph;
 	}
 }
