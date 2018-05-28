@@ -76,7 +76,7 @@ export default class DijkstraSearch {
 		}
 
 		if (nodesProps[finish].distanceFromStart !== Infinity) {
-			const path = [end];
+			const path = [];
 			let last = end;
 			while (last.name !== start) {
 				path.unshift(last);

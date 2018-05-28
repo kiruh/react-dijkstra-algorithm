@@ -60,19 +60,21 @@ export const getRandomInt = (min, max) =>
 	Math.floor(Math.random() * (max - min + 1)) + min;
 
 export const getExampleGraphJSON = () => {
-	const NODES_LENGTH = 20;
-	const LINKS_LENGTH = 20;
+	// return HARCODED_GRAPH;
+	const NODES_LENGTH = 25;
+	const LINKS_LENGTH = 25;
 
 	const nodes = [];
 	const links = [];
-
-	for (let i = 0; i < NODES_LENGTH; i += 1) {
-		const name = getFirstSillyName();
-		const weight = getRandomInt(1, 1000);
-		const x = getRandomInt(25 * i, 25 * (i + 1));
-		const y = getRandomInt(0, 500);
-		const node = { name, weight, x, y };
-		nodes.push(node);
+	for (let i = 0; i < 5; i += 1) {
+		for (let j = 0; j < 5; j += 1) {
+			const name = getFirstSillyName();
+			const weight = getRandomInt(1, 1000);
+			const x = getRandomInt(100 * i + 20, 100 * (i + 1) - 20);
+			const y = getRandomInt(100 * j + 20, 100 * (j + 1) - 20);
+			const node = { name, weight, x, y };
+			nodes.push(node);
+		}
 	}
 
 	for (let i = 0; i < LINKS_LENGTH; i += 1) {
