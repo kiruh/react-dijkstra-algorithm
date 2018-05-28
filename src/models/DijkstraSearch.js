@@ -18,6 +18,7 @@ export default class DijkstraSearch {
 		}
 
 		const beginning = graph.nodes[start];
+		const end = graph.nodes[finish];
 
 		const queue = [];
 		queue.push(beginning);
@@ -42,16 +43,16 @@ export default class DijkstraSearch {
 				const link = current.paths[i];
 				const endPoint = graph.nodes[link.toNodeName];
 
-				if (endPoint.name === finish) {
-					const path = [endPoint];
-					let last = current;
-					while (last.name !== start) {
-						path.unshift(last);
-						last = distances[last.name].prev;
-					}
-					path.unshift(beginning);
-					return path;
-				}
+				// if (endPoint.name === finish) {
+				// 	const path = [endPoint];
+				// 	let last = current;
+				// 	while (last.name !== start) {
+				// 		path.unshift(last);
+				// 		last = distances[last.name].prev;
+				// 	}
+				// 	path.unshift(beginning);
+				// 	return path;
+				// }
 
 				if (!tested.includes(endPoint)) {
 					const currentDistance = distances[current.name].dist;
@@ -79,6 +80,17 @@ export default class DijkstraSearch {
 					}
 				}
 			}
+		}
+
+		if (distances[finish].dist !== Infinity) {
+			const path = [end];
+			let last = end;
+			while (last.name !== start) {
+				path.unshift(last);
+				last = distances[last.name].prev;
+			}
+			path.unshift(beginning);
+			return path;
 		}
 
 		return null;

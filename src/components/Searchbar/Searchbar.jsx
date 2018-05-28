@@ -45,17 +45,18 @@ class Searchbar extends React.Component {
 
 	static renderFound(answer, index) {
 		const color = COLORS[index];
-		const pathInfo = answer.path.reduce((pthinf, node) => {
+		const pathInfo = answer.path.reduce((pthinf, node, j) => {
 			const arr = pthinf;
 			if (arr.length) {
 				arr.push(
 					<i
+						key={`${j}arrow`}
 						className="fas fa-arrow-circle-right"
 						style={{ color: "#9E9E9E" }}
 					/>,
 				);
 			}
-			arr.push(<span> {node.name} </span>);
+			arr.push(<span key={j}> {node.name} </span>);
 			return arr;
 		}, []);
 		return (
