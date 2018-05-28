@@ -20,7 +20,7 @@ export const ONE_FIELD_SETTERS = {
 
 export const getInitialState = () => ({
 	graph: new Graph(),
-	distanceType: DijkstraSearch.BY_LINK_LENGTH,
+	distanceType: DijkstraSearch.BY_COORDINATES,
 	showLinkDots: true,
 	showProperties: false,
 	activeItem: null,

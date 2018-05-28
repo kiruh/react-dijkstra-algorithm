@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-operators */
 export default class DijkstraSearch {
 	static get BY_LINK_LENGTH() {
 		return "BY_LINK_LENGTH";
@@ -24,70 +25,62 @@ export default class DijkstraSearch {
 		queue.push(beginning);
 
 		const tested = [];
-		const distances = Object.keys(graph.nodes).reduce(
-			(reduced, name) => ({ ...reduced, [name]: { dist: Infinity } }),
+		const nodesProps = Object.keys(graph.nodes).reduce(
+			(reduced, name) => ({
+				...reduced,
+				[name]: { distanceFromStart: Infinity },
+			}),
 			{},
 		);
-		distances[start] = { dist: 0 };
+		nodesProps[start] = { distanceFromStart: 0 };
 
 		while (queue.length > 0) {
 			queue.sort(
-				(a, b) => distances[a.name].dist - distances[b.name].dist,
+				(a, b) =>
+					nodesProps[a.name].distanceFromStart -
+					nodesProps[b.name].distanceFromStart,
 			);
 
 			const current = queue.shift();
-
 			tested.push(current);
 
-			for (let i = 0; i < current.paths.length; i += 1) {
-				const link = current.paths[i];
+			current.paths.forEach(link => {
 				const endPoint = graph.nodes[link.toNodeName];
+				if (tested.includes(endPoint)) return;
 
-				// if (endPoint.name === finish) {
-				// 	const path = [endPoint];
-				// 	let last = current;
-				// 	while (last.name !== start) {
-				// 		path.unshift(last);
-				// 		last = distances[last.name].prev;
-				// 	}
-				// 	path.unshift(beginning);
-				// 	return path;
-				// }
+				const currentDistance =
+					nodesProps[current.name].distanceFromStart;
+				const newDistance =
+					currentDistance +
+					DijkstraSearch.getDistance(
+						current,
+						link,
+						endPoint,
+						distanceType,
+					);
 
-				if (!tested.includes(endPoint)) {
-					const currentDistance = distances[current.name].dist;
-					const newDistance =
-						currentDistance +
-						DijkstraSearch.getDistance(
-							current,
-							link,
-							endPoint,
-							distanceType,
-						);
-
-					if (distances[endPoint.name].dist > newDistance) {
-						distances[endPoint.name] = {
-							prev: current,
-							dist: newDistance,
-						};
-					}
-
-					const index = queue.indexOf(endPoint);
-					if (index !== -1) {
-						queue[index] = endPoint;
-					} else {
-						queue.push(endPoint);
-					}
+				if (nodesProps[endPoint.name].distanceFromStart > newDistance) {
+					nodesProps[endPoint.name] = {
+						prev: current,
+						distanceFromStart: newDistance,
+					};
 				}
-			}
+
+				const index = queue.indexOf(endPoint);
+				if (index !== -1) {
+					queue[index] = endPoint;
+				} else {
+					queue.push(endPoint);
+				}
+			});
 		}
 
-		if (distances[finish].dist !== Infinity) {
+		if (nodesProps[finish].distanceFromStart !== Infinity) {
 			const path = [end];
 			let last = end;
 			while (last.name !== start) {
 				path.unshift(last);
-				last = distances[last.name].prev;
+				last = nodesProps[last.name].prev;
 			}
 			path.unshift(beginning);
 			return path;
@@ -104,9 +97,7 @@ export default class DijkstraSearch {
 		if (distanceType === DijkstraSearch.BY_COORDINATES) {
 			const a = node;
 			const b = endPoint;
-			/* eslint-disable no-mixed-operators */
 			return Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2);
-			/* eslint-enable */
 		}
 
 		if (distanceType === DijkstraSearch.BY_WEIGHT) {
