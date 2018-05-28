@@ -10,7 +10,7 @@ export const FADE_COLOR = "#eeeeee";
 export const DANGER_COLOR = "#dc3545";
 export const COLORS = getRandomColors();
 
-export const EXAMPLE_GRAPH = {
+export const HARCODED_GRAPH = {
 	nodes: [
 		{ name: "Howler", weight: 345, x: 312.25, y: 511 },
 		{ name: "Sheergrabber", weight: 46, x: 321.84375, y: 271 },

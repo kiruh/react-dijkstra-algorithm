@@ -10,9 +10,10 @@ export default class Node {
 	}
 
 	insertPath(path) {
-		if (!this.paths.some(p => p.toNodeName === path.toNodeName)) {
-			this.paths.push(path);
-		}
+		if (this.paths.some(p => p.toNodeName === path.toNodeName)) return;
+		if (this.name === path.toNodeName) return;
+
+		this.paths.push(path);
 	}
 
 	removeLink(toNodeName) {

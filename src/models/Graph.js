@@ -136,7 +136,7 @@ export default class Graph {
 			const x = Number(nd.x);
 			const y = Number(nd.y);
 
-			if (!name || !weight || !x || !y) {
+			if (!name || isNaN(weight) || isNaN(x) || isNaN(y)) {
 				console.warn("Invalid node, skipped.", nd);
 				return;
 			}
@@ -153,7 +153,7 @@ export default class Graph {
 			const { start, end } = link;
 			const length = Number(link.length);
 
-			if (!start || !end || !length) {
+			if (!start || !end || isNaN(length)) {
 				console.warn("Invalid link, skipped.", link);
 				return;
 			}

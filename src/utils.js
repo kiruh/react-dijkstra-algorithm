@@ -1,4 +1,6 @@
 /* eslint-disable no-mixed-operators */
+import sillyname from "sillyname";
+
 const getMinOrMaxPropertyHelper = (arr, prop, type) => {
 	/* IM FCKN GENIUS */
 	if (!arr) return undefined;
@@ -50,3 +52,43 @@ export const getEquationOfLineFromTwoPoints = (point1, point2) => {
 
 export const floatToFixedIfNeeded = number =>
 	number.toFixed(2).replace(/[.,]00$/, "");
+
+export const getFirstSillyName = () =>
+	sillyname().split(" ")[Math.round(Math.random())];
+
+export const getRandomInt = (min, max) =>
+	Math.floor(Math.random() * (max - min + 1)) + min;
+
+export const getExampleGraphJSON = () => {
+	const NODES_LENGTH = 20;
+	const LINKS_LENGTH = 20;
+
+	const nodes = [];
+	const links = [];
+
+	for (let i = 0; i < NODES_LENGTH; i += 1) {
+		const name = getFirstSillyName();
+		const weight = getRandomInt(1, 1000);
+		const x = getRandomInt(25 * i, 25 * (i + 1));
+		const y = getRandomInt(0, 500);
+		const node = { name, weight, x, y };
+		nodes.push(node);
+	}
+
+	for (let i = 0; i < LINKS_LENGTH; i += 1) {
+		const startIndex = getRandomInt(0, NODES_LENGTH - 1);
+		let endIndex = true;
+		do {
+			endIndex = getRandomInt(0, NODES_LENGTH - 1);
+		} while (endIndex === startIndex);
+
+		const start = nodes[startIndex].name;
+		const end = nodes[endIndex].name;
+		const length = getRandomInt(1, 1000);
+
+		const link = { start, end, length };
+		links.push(link);
+	}
+
+	return { nodes, links };
+};

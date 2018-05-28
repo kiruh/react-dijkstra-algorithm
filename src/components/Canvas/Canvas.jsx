@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import sillyname from "sillyname";
 import { connect } from "react-redux";
 
 import Graph from "~/models/Graph";
@@ -11,6 +10,7 @@ import Answers from "./Answers";
 import { setActiveItem } from "~/actions";
 import { addNode } from "~/actions/controller";
 import { ACTIVE_COLOR, LINK_COLOR, FADE_COLOR, COLORS } from "~/constants";
+import { getFirstSillyName } from "~/utils";
 
 import styles from "./Canvas.less";
 
@@ -56,7 +56,7 @@ class Canvas extends React.Component {
 			let name;
 			let similar = true;
 			while (similar) {
-				name = sillyname().split(" ")[Math.round(Math.random())];
+				name = getFirstSillyName();
 				similar = this.props.graph.nodes[name];
 			}
 			const node = new Node({
