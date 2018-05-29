@@ -59,38 +59,51 @@ export const getFirstSillyName = () =>
 export const getRandomInt = (min, max) =>
 	Math.floor(Math.random() * (max - min + 1)) + min;
 
+export const getDistance = (a, b) =>
+	Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2);
+
 export const getExampleGraphJSON = () => {
 	// return HARCODED_GRAPH;
-	const NODES_LENGTH = 25;
-	const LINKS_LENGTH = 25;
 
 	const nodes = [];
 	const links = [];
-	for (let i = 0; i < 5; i += 1) {
-		for (let j = 0; j < 5; j += 1) {
-			const name = getFirstSillyName();
+
+	const usedNames = [];
+
+	for (let i = 0; i < 8; i += 1) {
+		for (let j = 0; j < 8; j += 1) {
+			let name;
+			do {
+				name = getFirstSillyName();
+			} while (usedNames.includes(name));
+			usedNames.push(name);
+
 			const weight = getRandomInt(1, 1000);
-			const x = getRandomInt(100 * i + 20, 100 * (i + 1) - 20);
-			const y = getRandomInt(100 * j + 20, 100 * (j + 1) - 20);
+			const x = getRandomInt(125 * i + 20, 125 * (i + 1) - 20);
+			const y = getRandomInt(125 * j + 20, 125 * (j + 1) - 20);
 			const node = { name, weight, x, y };
 			nodes.push(node);
 		}
 	}
 
-	for (let i = 0; i < LINKS_LENGTH; i += 1) {
-		const startIndex = getRandomInt(0, NODES_LENGTH - 1);
-		let endIndex = true;
-		do {
-			endIndex = getRandomInt(0, NODES_LENGTH - 1);
-		} while (endIndex === startIndex);
+	nodes.forEach(node => {
+		const destinations = nodes.map(nd => {
+			const distance =
+				nd.name === node.name ? Infinity : getDistance(node, nd);
+			return { name: nd.name, distance };
+		});
 
-		const start = nodes[startIndex].name;
-		const end = nodes[endIndex].name;
-		const length = getRandomInt(1, 1000);
+		destinations.sort((a, b) => a.distance - b.distance);
 
-		const link = { start, end, length };
-		links.push(link);
-	}
+		destinations.slice(0, 3).forEach(destination => {
+			const start = node.name;
+			const end = destination.name;
+			const length = getRandomInt(1, 1000);
+
+			const link = { start, end, length };
+			links.push(link);
+		});
+	});
 
 	return { nodes, links };
 };
