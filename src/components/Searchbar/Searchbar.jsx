@@ -50,12 +50,12 @@ class Searchbar extends React.Component {
 				arr.push(
 					<i
 						key={`${j}arrow`}
-						className="fas fa-arrow-circle-right"
+						className="fas fa-caret-right"
 						style={{ color: "#9E9E9E" }}
 					/>,
 				);
 			}
-			arr.push(<span key={j}> {node.name} </span>);
+			arr.push(<span key={j}>&nbsp;&nbsp;{node.name}&nbsp;&nbsp;</span>);
 			return arr;
 		}, []);
 		return (
