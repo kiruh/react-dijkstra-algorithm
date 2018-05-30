@@ -156,7 +156,7 @@ class Canvas extends React.Component {
 				<div className={styles.svgB}>
 					<svg
 						width={endAtX > 1000 ? endAtX : 1000}
-						height={endAtY > 1000 ? endAtY : 1000}
+						height={endAtY > 1200 ? endAtY : 1200}
 						ref={svgNode => {
 							this.svgNode = svgNode;
 						}}

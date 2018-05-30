@@ -45,7 +45,7 @@ class DistanceType extends React.Component {
 	}
 
 	render() {
-		return <div className="my-4">{this.renderOptions()}</div>;
+		return <div className="my-4 ml-1">{this.renderOptions()}</div>;
 	}
 }
 

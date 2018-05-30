@@ -85,7 +85,7 @@ class Import extends React.Component {
 					}}
 				/>
 				<label className="custom-file-label" htmlFor="import-file">
-					Import from JSON
+					Import JSON
 				</label>
 				{this.renderErrorMsg()}
 			</div>

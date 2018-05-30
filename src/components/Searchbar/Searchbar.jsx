@@ -24,14 +24,13 @@ class Searchbar extends React.Component {
 	}
 
 	static renderNoFound(answer, index) {
-		const color = COLORS[index];
 		return (
 			<div
 				key={index}
 				className="alert"
 				style={{
+					border: `1px solid #eeeeee`,
 					borderLeft: `5px solid ${DANGER_COLOR}`,
-					backgroundColor: Searchbar.getTransparentColor(color),
 				}}
 			>
 				No path from {answer.start} to {answer.end}{" "}
@@ -64,8 +63,8 @@ class Searchbar extends React.Component {
 				key={index}
 				className="alert"
 				style={{
+					border: `1px solid #eeeeee`,
 					borderLeft: `5px solid ${color}`,
-					backgroundColor: Searchbar.getTransparentColor(color),
 				}}
 			>
 				{pathInfo}
@@ -105,7 +104,7 @@ class Searchbar extends React.Component {
 		if (this.props.answers) return null;
 		return (
 			<button
-				className="btn btn-primary"
+				className="btn btn-light"
 				disabled={this.state.selectedNodes.length < 2}
 				onClick={() => {
 					searchGraph(this.state.selectedNodes);
@@ -135,13 +134,13 @@ class Searchbar extends React.Component {
 		if (!this.props.answers) return null;
 		return (
 			<button
-				className="btn btn-danger"
+				className="btn btn-light"
 				onClick={() => {
 					clearAnswers();
 				}}
 				title="Clear Search Results"
 			>
-				Clear Search Results
+				Clear
 			</button>
 		);
 	}
