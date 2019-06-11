@@ -1,4 +1,10 @@
-## GRAPHES
+# React Dijkstra Algorithm
+
+This project was created as a homework at Plovdiv University.
+
+It's implemented with React.
+
+## Description
 
 This application helps you find the nearset path from one node to another based on node coordinates, link lengths or nodes weight.
 
